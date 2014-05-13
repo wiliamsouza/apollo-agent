@@ -16,13 +16,13 @@ Get the code
 ------------
 
 ```
-git clone https://github.com/wiliamsouza/apollo.git
+git clone https://github.com/wiliamsouza/apollo-agent.git
 ```
 
 Go to apollo/agent:
 
 ```
-cd apollo/agent
+cd apollo-agent
 ```
 
 Build source code
@@ -51,8 +51,22 @@ gradle check
 
 It will run `FindBugs` and generate a report inside `build/reports/findbugs/main.html`
 
-udev rules
-----------
+Troubleshooting
+---------------
+
+libstdc++.so.6:
+
+If you get an error like:
+```
+adb: error while loading shared libraries: libstdc++.so.6: cannot open shared object file: No such file or directory
+```
+On ubuntu 14.04 install:
+
+```
+sudo apt-get install lib32stdc++6
+```
+
+udev rules:
 
 Apollo agent ships with an intial udev rules `agent/etc/udev/rules.d/51-android.rules`
 it sets device group to `plugdev` and change the mode to `0666`.
