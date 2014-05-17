@@ -10,8 +10,6 @@ Dependecies
  * JDK 1.6.0_45
  * Graddle 1.10
 
-Development machine use versions above.
-
 Get the code
 ------------
 
@@ -49,7 +47,8 @@ Check for bugs
 gradle check
 ```
 
-It will run `FindBugs` and generate a report inside `build/reports/findbugs/main.html`
+It will run `FindBugs` and generate a report inside
+`build/reports/findbugs/main.html`
 
 Troubleshooting
 ---------------
@@ -58,7 +57,8 @@ libstdc++.so.6:
 
 If you get an error like:
 ```
-adb: error while loading shared libraries: libstdc++.so.6: cannot open shared object file: No such file or directory
+adb: error while loading shared libraries: libstdc++.so.6: cannot open
+shared object file: No such file or directory
 ```
 On ubuntu 14.04 install:
 
@@ -66,10 +66,21 @@ On ubuntu 14.04 install:
 sudo apt-get install lib32stdc++6
 ```
 
+findbug:
+
+```
+FindBugs encountered an error.
+```
+
+Using java 1.8 as findbug site says "Some classfiles compiled for Java 1.8
+give FindBugs problems, the next major release of FindBugs will handle Java
+1.8 classfiles".
+
 udev rules:
 
-Apollo agent ships with an intial udev rules `agent/etc/udev/rules.d/51-android.rules`
-it sets device group to `plugdev` and change the mode to `0666`.
+Apollo agent ships with an intial udev rules
+`agent/etc/udev/rules.d/51-android.rules` it sets device group to
+`plugdev` and change the mode to `0666`.
 
 To reload rules run:
 
