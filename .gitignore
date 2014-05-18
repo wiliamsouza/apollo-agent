@@ -1,2 +1,7 @@
 .gradle/*
+.idea/*
 build
+apollo-agent.iml
+apollo-agent.ipr
+apollo-agent.iws
+local.properties
