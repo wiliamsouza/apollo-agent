@@ -1,19 +1,17 @@
-package com.github.wiliamsouza.apollo;
+package com.github.wiliamsouza.apollo.device;
 
-import com.android.ddmlib.AdbCommandRejectedException;
 import com.android.ddmlib.IDevice;
 import com.android.ddmlib.AndroidDebugBridge.IDeviceChangeListener;
-import com.android.ddmlib.TimeoutException;
 
 import javax.websocket.Session;
 import java.io.IOException;
 
 public class DeviceListener implements IDeviceChangeListener {
 
-    private Session session;
+    private Session webSocketSession;
 
-    public DeviceListener(Session session) {
-        this.session = session;
+    public DeviceListener(Session webSocketSession) {
+        this.webSocketSession = webSocketSession;
     }
 
     public void deviceConnected(IDevice device) {
@@ -21,8 +19,9 @@ public class DeviceListener implements IDeviceChangeListener {
         System.out.println(msg);
         System.out.println(device.getState());
         try {
-            this.session.getBasicRemote().sendText(msg);
+            this.webSocketSession.getBasicRemote().sendText(msg);
         } catch (IOException e) {
+            // TODO: Print a more clear error message here
             e.printStackTrace();
         }
         System.out.println("**********************************************************************");
@@ -33,8 +32,9 @@ public class DeviceListener implements IDeviceChangeListener {
         System.out.println(msg);
         System.out.println(device.getState());
         try {
-            this.session.getBasicRemote().sendText(msg);
+            this.webSocketSession.getBasicRemote().sendText(msg);
         } catch (IOException e) {
+            // TODO: Print a more clear error message here
             e.printStackTrace();
         }
         System.out.println("**********************************************************************");
@@ -45,8 +45,9 @@ public class DeviceListener implements IDeviceChangeListener {
         System.out.println(msg);
         System.out.println(device.getState());
         try {
-            this.session.getBasicRemote().sendText(msg);
+            this.webSocketSession.getBasicRemote().sendText(msg);
         } catch (IOException e) {
+            // TODO: Print a more clear error message here
             e.printStackTrace();
         }
         System.out.println("**********************************************************************");

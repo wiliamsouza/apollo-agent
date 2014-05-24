@@ -1,4 +1,4 @@
-package com.github.wiliamsouza.apollo;
+package com.github.wiliamsouza.apollo.websocket;
 
 import javax.websocket.ClientEndpoint;
 import javax.websocket.OnMessage;

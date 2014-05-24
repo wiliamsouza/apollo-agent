@@ -1,5 +1,10 @@
 package com.github.wiliamsouza.apollo;
 
+import com.github.wiliamsouza.apollo.config.Configuration;
+import com.github.wiliamsouza.apollo.device.DeviceMonitor;
+import com.github.wiliamsouza.apollo.websocket.WebSocketEndpoint;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 
@@ -22,8 +27,9 @@ public class Agent {
     public static void main(String[] args) {
 
         String config = "/etc/apollo/agent.conf";
+        Configuration configuration = null;
         CommandLine cmd;
-        Session session = null;
+        Session webSocketSession = null;
 
         Option configFile = OptionBuilder.withArgName("file")
                           .hasArg()
@@ -33,12 +39,12 @@ public class Agent {
         options.addOption(configFile);
         options.addOption("h", "help", false, "Print this message.");
 
+        HelpFormatter formatter = new HelpFormatter();
         CommandLineParser parser = new BasicParser();
         try {
             cmd = parser.parse(options, args);
             if (cmd.hasOption("help")) {
-                HelpFormatter formatter = new HelpFormatter();
-                formatter.printHelp("apollo", options);
+                formatter.printHelp("apollo-agent.jar", options);
             }
             String conf = cmd.getOptionValue("config");
             if (conf != null) {
@@ -46,30 +52,40 @@ public class Agent {
             }
         }
         catch (ParseException e){
-            System.err.println("Option error: " + e.getMessage());
+            System.err.println("Error parsing command line arguments.");
+            formatter.printHelp("apollo", options);
+            System.exit(1);
         }
 
-        // TODO: Add the following as options to etc/apollo/agent.conf file
-        String APIKey = "";
-        String ADBPath = "/usr/bin/adb";
-        String serverURI = "ws://localhost:8000/ws/agent/";
-        URI uri = URI.create(serverURI + APIKey);
-
-        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
         try {
-            session = container.connectToServer(WebSocketEndpoint.class, uri);
-        } catch (DeploymentException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            configuration = new Configuration(config);
+        } catch (FileNotFoundException e) {
+            System.err.printf("Configuration file not found: %s\n", config);
+            System.exit(1);
         }
 
-        DeviceMonitor monitor = new DeviceMonitor(session, ADBPath);
+        URI uri = URI.create(configuration.getWebSocketUri() + configuration.getAPIKey());
+        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+
+        try {
+            webSocketSession = container.connectToServer(WebSocketEndpoint.class, uri);
+        } catch (DeploymentException e) {
+            // TODO: Print a more clear error message here
+            e.printStackTrace();
+            System.exit(1);
+        } catch (IOException e) {
+            // TODO: Print a more clear error message here
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        System.out.println(configuration.getAPIUri());
+
+        DeviceMonitor monitor = new DeviceMonitor(webSocketSession, configuration.getAdbPath());
         monitor.start();
         //monitor.finish();
 
-        System.out.println(config);
-        System.out.println("Apollo agent. \n");
+        System.out.printf("Apollo agent: %s.\n", configuration.getName());
 
         while (true) {
         }
