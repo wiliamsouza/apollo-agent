@@ -15,16 +15,13 @@ Get the code
 
 ```
 git clone https://github.com/wiliamsouza/apollo-agent.git
-```
-
-Go to apollo/agent:
-
-```
 cd apollo-agent
 ```
 
 Build source code
 -----------------
+
+Edit `gradle.build` and change `androidHome` to point to android sdk folder.
 
 ```
 gradle build
